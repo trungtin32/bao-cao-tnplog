@@ -21,6 +21,10 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"S
 .livestat.ok{color:var(--good)}.livestat.err{color:var(--bad)}.livestat.load{color:var(--warn)}
 h2.sec{font-size:16px;margin:34px 0 4px;display:flex;align-items:center;gap:8px}
 h2.sec .tag{background:var(--brand);color:#fff;border-radius:6px;padding:3px 9px;font-size:11px;font-weight:700;letter-spacing:.02em}
+h1.mucgroup{font-size:22px;margin:40px 0 4px;padding-top:22px;border-top:3px solid var(--brand);display:flex;align-items:center;gap:10px}
+h1.mucgroup:first-of-type{border-top:none;padding-top:0;margin-top:18px}
+h1.mucgroup .mtag{background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;border-radius:8px;padding:4px 12px;font-size:18px;font-weight:800}
+.fillnote{color:var(--warn);font-style:italic}
 p.cap{color:var(--muted);font-size:12.5px;margin:2px 0 14px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
 .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:14px 0 4px}
@@ -39,6 +43,8 @@ table.t td{padding:8px 10px;text-align:right;border-bottom:1px solid var(--line)
 table.t td.l{text-align:left;font-weight:600}
 table.t tbody tr:nth-child(even){background:#fafbfc}
 table.t tfoot td{font-weight:700;border-top:2px solid var(--brand);background:var(--accent)}
+table.t tr.fix td, table.t td.fix{background:var(--fix);border-top:1.5px solid var(--fixln);border-bottom:1.5px solid var(--fixln)}
+table.t .pill.p-warn{background:#fff7ed;color:var(--warn)}
 .pill{padding:2px 8px;border-radius:999px;font-size:11.5px;font-weight:700}
 .p-good{background:#dcfce7;color:var(--good)}.p-bad{background:#fee2e2;color:var(--bad)}.p-warn{background:#fff7ed;color:var(--warn)}
 .chartbox{position:relative;height:280px;margin:14px 0}
@@ -81,14 +87,21 @@ footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--line);color:v
 
   <div class="kpis" id="kpis"></div>
 
-  <h2 class="sec"><span class="tag">1</span> Diễn biến doanh thu &amp; lãi gộp theo tháng</h2>
+  <h1 class="mucgroup"><span class="mtag">①</span> Con số lỗ trong 6 tháng đầu năm &amp; phân tích chi phí</h1>
+  <p class="cap">Theo lịch họp: con số lỗ trong 6 tháng, phân tích chi phí Vận hành / Kinh doanh / Nhân sự tuyển dụng (cho đầu tư, vay bên ngoài).</p>
+
+  <div class="note" id="lossNote" style="margin:6px 0 16px"></div>
+
+  <div class="card scroll" style="margin-bottom:16px"><table class="t" id="tCpBreakdown"></table></div>
+
+  <h2 class="sec"><span class="tag">1.1</span> Diễn biến doanh thu &amp; lãi gộp theo tháng</h2>
   <p class="cap">Doanh thu, chi phí và lãi gộp từng tháng trong kỳ, tính theo ngày vận chuyển.</p>
   <div class="grid2">
     <div class="card"><div class="chartbox"><canvas id="chMonth"></canvas></div></div>
     <div class="card scroll"><table class="t" id="tMonth"></table></div>
   </div>
 
-  <h2 class="sec"><span class="tag">2</span> Đối chiếu Kế hoạch doanh thu &amp; Chỉ tiêu khoán vận hành</h2>
+  <h2 class="sec"><span class="tag">1.2</span> Đối chiếu Kế hoạch doanh thu &amp; Chỉ tiêu khoán vận hành</h2>
   <p class="cap">So với chỉ tiêu doanh thu theo tháng và định mức chi phí do công ty ban hành (Quý I, II/2026; định mức khoán áp dụng chính thức từ 01/06/2026).</p>
   <div class="grid2">
     <div class="card"><div class="chartbox"><canvas id="chPlan"></canvas></div></div>
@@ -96,43 +109,109 @@ footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--line);color:v
   </div>
   <div class="card scroll" style="margin-top:14px"><table class="t" id="tKhoan"></table></div>
 
-  <h2 class="sec"><span class="tag">3</span> Biến động giá nhiên liệu &amp; tác động chi phí</h2>
+  <h2 class="sec"><span class="tag">1.3</span> Biến động giá nhiên liệu &amp; tác động chi phí</h2>
   <p class="cap">Chi phí nhiên liệu (dầu DO) đội xe nhà theo tháng, đối chiếu diễn biến giá dầu thị trường trong nước.</p>
   <div class="grid2">
     <div class="card"><div class="chartbox"><canvas id="chFuel"></canvas></div></div>
     <div class="card" id="fuelNote" style="font-size:13px;line-height:1.75"></div>
   </div>
 
-  <h2 class="sec"><span class="tag">4</span> Cơ cấu doanh thu: Xe nhà vs Thương mại</h2>
+  <h2 class="sec"><span class="tag">1.4</span> Cơ cấu doanh thu: Xe nhà vs Thương mại</h2>
   <p class="cap">So sánh tỷ trọng và biên lợi nhuận giữa đội xe nhà (TNP LOG) và các đơn thuê ngoài (NCC thương mại).</p>
   <div class="grid2">
     <div class="card"><div class="chartbox"><canvas id="chOwn"></canvas></div></div>
     <div class="card scroll"><table class="t" id="tOwn"></table></div>
   </div>
 
-  <h2 class="sec"><span class="tag">5</span> Top 10 khách hàng theo doanh thu</h2>
+  <h2 class="sec"><span class="tag">1.5</span> Top 10 khách hàng theo doanh thu</h2>
   <p class="cap">10 khách hàng đóng góp doanh thu lớn nhất trong 6 tháng đầu năm.</p>
   <div class="grid2">
     <div class="card"><div class="chartbox"><canvas id="chCust"></canvas></div></div>
     <div class="card scroll"><table class="t" id="tCust"></table></div>
   </div>
 
-  <h2 class="sec"><span class="tag">6</span> Top nhà cung cấp thương mại</h2>
+  <h2 class="sec"><span class="tag">1.6</span> Top nhà cung cấp thương mại</h2>
   <p class="cap">Các đối tác NCC ngoài có doanh thu điều phối và biên lợi nhuận cao nhất.</p>
   <div class="card scroll"><table class="t" id="tNcc"></table></div>
 
-  <h2 class="sec"><span class="tag">7</span> Cơ cấu theo nghiệp vụ vận chuyển</h2>
+  <h2 class="sec"><span class="tag">1.7</span> Cơ cấu theo nghiệp vụ vận chuyển</h2>
   <p class="cap">Tỷ trọng doanh thu theo từng loại hình nghiệp vụ (tuyến trục, hàng ghép, hàng biên...), đối chiếu tỷ trọng mục tiêu đã đăng ký.</p>
   <div class="card scroll"><table class="t" id="tNv"></table></div>
   <div class="card scroll" style="margin-top:14px"><table class="t" id="tNvTarget"></table></div>
 
-  <h2 class="sec"><span class="tag">8</span> Lưu ý về dữ liệu</h2>
+  <h2 class="sec"><span class="tag">1.8</span> Lưu ý về dữ liệu</h2>
   <div class="note">
-    Chi phí VETC (phí trạm thu phí tự động) đã được cập nhật đầy đủ cho cả 6 tháng đầu năm 2026 trong sheet nguồn, nên các số liệu chi phí và lãi gộp theo tháng trong báo cáo này phản ánh đầy đủ, đồng nhất giữa các tháng. Riêng <b>định mức khoán chi phí</b> (mục 2) chỉ chính thức áp dụng từ <b>01/06/2026</b> nên số liệu đối chiếu các tháng trước đó chỉ mang tính tham khảo; chỉ tiêu bảo dưỡng "1.500.000đ/tua" được quy đổi tạm theo mỗi lượt bảo dưỡng phát sinh ghi nhận trong sổ do chưa có dữ liệu số tua/chuyến khứ hồi riêng.
+    Chi phí VETC (phí trạm thu phí tự động) đã được cập nhật đầy đủ cho cả 6 tháng đầu năm 2026 trong sheet nguồn, nên các số liệu chi phí và lãi gộp theo tháng trong báo cáo này phản ánh đầy đủ, đồng nhất giữa các tháng. Riêng <b>định mức khoán chi phí</b> (mục 1.2) chỉ chính thức áp dụng từ <b>01/06/2026</b> nên số liệu đối chiếu các tháng trước đó chỉ mang tính tham khảo; chỉ tiêu bảo dưỡng "1.500.000đ/tua" được quy đổi tạm theo mỗi lượt bảo dưỡng phát sinh ghi nhận trong sổ do chưa có dữ liệu số tua/chuyến khứ hồi riêng.
   </div>
 
-  <h2 class="sec"><span class="tag">9</span> Nhận định &amp; Khuyến nghị</h2>
+  <h1 class="mucgroup"><span class="mtag">②</span> Hướng xử lý</h1>
+  <p class="cap">Cách khắc phục · Kế hoạch khắc phục · Ước thời gian thực hiện.</p>
+
+  <h2 class="sec"><span class="tag">2.1</span> Cách khắc phục — Nhận định &amp; nguyên nhân</h2>
   <div class="analysis" id="analysis"></div>
+
+  <h2 class="sec"><span class="tag">2.2</span> Kế hoạch khắc phục</h2>
+  <p class="cap">Chuyển các khuyến nghị ở mục 2.1 thành kế hoạch hành động cụ thể — cần bổ sung người phụ trách &amp; deadline tại cuộc họp.</p>
+  <div class="card scroll" style="margin-bottom:14px"><table class="t" id="tKhacPhuc"></table></div>
+
+  <h2 class="sec"><span class="tag">2.3</span> Ước thời gian thực hiện</h2>
+  <div class="note">
+    <span class="fillnote">[ Thống nhất mốc thời gian hoàn thành từng hạng mục ở mục 2.2 tại cuộc họp — ví dụ: trong tháng 8/2026, hết quý III/2026... ]</span>
+  </div>
+
+  <h1 class="mucgroup"><span class="mtag">③</span> Kế hoạch 6 tháng cuối năm 2026 (T7–T12)</h1>
+  <p class="cap">Hướng vận hành · Chi phí cho tương lai · Cam kết lợi nhuận. Mô hình theo tuyến Hà Nội (8T-HN, 15T-HN), dùng chung công thức định giá bán theo %CP/DT như hệ thống tính giá hiện tại — chỉnh số xe, tua/xe, giá dầu để thử kịch bản khác ngay tại đây.</p>
+
+  <div class="note" style="margin-bottom:14px">
+    <b>Lưu ý cho cuộc họp (đối chiếu với mục ①):</b> Theo dữ liệu 2 sheet nguồn (xem KPI đầu trang và bảng phân tích chi phí ở mục ①), mảng vận hành xe 6 tháng đầu năm đang <b>lãi gộp</b>, không lỗ. Hai sheet này không có chi phí quản lý/kinh doanh, lãi vay hay chi phí tuyển dụng — nếu số "lỗ" nêu trong cuộc họp đến từ các khoản này hoặc từ công nợ khó đòi, cần bổ sung số liệu riêng để đối chiếu.
+  </div>
+
+  <h2 class="sec"><span class="tag">3.1</span> Hướng vận hành</h2>
+  <div class="card" style="margin-bottom:14px">
+    <div style="display:flex;gap:14px;flex-wrap:wrap">
+      <div><label style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:5px">Giá dầu diesel (đ/lít)</label>
+        <input id="kh_gia_dau" type="number" value="26270" style="width:130px;padding:8px 10px;border:1.5px solid var(--line);border-radius:8px;font-weight:700;color:var(--brand)"></div>
+      <div><label style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:5px">Giá bán theo %CP/DT</label>
+        <input id="kh_rt" type="number" value="0.8" step="0.05" style="width:100px;padding:8px 10px;border:1.5px solid var(--line);border-radius:8px;font-weight:700;color:var(--brand)"></div>
+      <div><label style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:5px">Số xe 8T</label>
+        <input id="kh_xe8" type="number" value="6" style="width:90px;padding:8px 10px;border:1.5px solid var(--line);border-radius:8px;font-weight:700;color:var(--brand)"></div>
+      <div><label style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:5px">Số xe 15T</label>
+        <input id="kh_xe15" type="number" value="1" style="width:90px;padding:8px 10px;border:1.5px solid var(--line);border-radius:8px;font-weight:700;color:var(--brand)"></div>
+    </div>
+  </div>
+
+  <div class="card scroll" style="margin-bottom:14px"><table class="t" id="tTuaxe"></table></div>
+
+  <p class="cap">Kế hoạch doanh thu theo nghiệp vụ 6 tháng cuối năm — <b>xe nhà TNP + thương mại (NCC ngoài)</b>, theo bảng kế hoạch nội bộ đã chốt.</p>
+  <div class="card scroll" style="margin-bottom:8px">
+    <table class="t">
+      <thead><tr><th class="l">STT</th><th class="l">Nội dung</th><th>Tháng 7</th><th>Tháng 8</th><th>Tháng 9</th><th>Tháng 10</th><th>Tháng 11</th><th>Tháng 12</th><th>Cả kỳ</th></tr></thead>
+      <tbody>
+        <tr><td class="l">1</td><td class="l">Nguyên chuyến trục Nam – Bắc</td><td>567.000.000</td><td>630.000.000</td><td>693.000.000</td><td>756.000.000</td><td>819.000.000</td><td>945.000.000</td><td>4.410.000.000</td></tr>
+        <tr><td class="l">2</td><td class="l">Nguyên chuyến trục Bắc – Nam</td><td>472.500.000</td><td>525.000.000</td><td>577.500.000</td><td>630.000.000</td><td>682.500.000</td><td>787.500.000</td><td>3.675.000.000</td></tr>
+        <tr><td class="l">3</td><td class="l">Nguyên chuyến ngắn nội miền</td><td>94.500.000</td><td>105.000.000</td><td>115.000.000</td><td>126.000.000</td><td>136.500.000</td><td>157.500.000</td><td>734.500.000</td></tr>
+        <tr><td class="l">4</td><td class="l">Nguyên chuyến cận miền</td><td>94.500.000</td><td>105.000.000</td><td>115.500.000</td><td>126.000.000</td><td>136.500.000</td><td>157.500.000</td><td>735.000.000</td></tr>
+        <tr><td class="l">5</td><td class="l">Hàng ghép Nam – Bắc</td><td>378.000.000</td><td>420.000.000</td><td>462.000.000</td><td>504.000.000</td><td>546.000.000</td><td>630.000.000</td><td>2.940.000.000</td></tr>
+        <tr><td class="l">6</td><td class="l">Hàng ghép Bắc – Nam</td><td>283.500.000</td><td>315.000.000</td><td>346.500.000</td><td>378.000.000</td><td>409.500.000</td><td>472.500.000</td><td>2.205.000.000</td></tr>
+      </tbody>
+      <tfoot><tr><td class="l" colspan="2">Tổng kế hoạch doanh thu (xe nhà + thương mại)</td><td>1.890.000.000</td><td>2.000.000.000</td><td>2.000.000.000</td><td>2.300.000.000</td><td>2.500.000.000</td><td>2.800.000.000</td><td>13.490.000.000</td></tr></tfoot>
+    </table>
+  </div>
+  <div class="note" style="margin-bottom:14px">
+    Theo kế hoạch CP-DT (bảng dưới), doanh thu xe nhà TNP cả kỳ ước đạt <b>8.658.000.000 đ</b>. So với tổng kế hoạch doanh thu toàn công ty <b>13.490.000.000 đ</b> ở trên, phần còn lại — khoảng <b>4.832.000.000 đ</b> — dự kiến đến từ thương mại (NCC ngoài). <span class="fillnote">[ Xác nhận tỷ lệ xe nhà/thương mại này có phù hợp với năng lực đội xe và kế hoạch mở rộng NCC hay không tại cuộc họp ]</span>
+  </div>
+
+  <h2 class="sec"><span class="tag">3.2</span> Chi phí cho tương lai</h2>
+  <p class="cap">Doanh thu, chi phí và lợi nhuận kế hoạch riêng cho <b>đội xe nhà TNP</b> (6 xe 8T + 1 xe 15T, tuyến Hà Nội) — khớp đúng công cụ "Kế hoạch CP-DT" nội bộ.</p>
+  <div class="grid2">
+    <div class="card"><div class="chartbox"><canvas id="chKhPlan"></canvas></div></div>
+    <div class="card scroll"><table class="t" id="tKhPlan"></table></div>
+  </div>
+  <div class="hint" style="color:var(--muted);font-size:11.5px;margin-top:8px">Tuyến Hà Nội · 1 tua = 2 chuyến · Sản lượng = số xe × tua/xe · Giá bán = tổng chi phí 1 chiều ÷ mốc %CP/DT (làm tròn 100.000đ). Định mức mặc định tái hiện đúng thông số đã áp dụng trong file kế hoạch nội bộ (Ke_hoach_CP-DT_TNP.xlsx).</div>
+
+  <h2 class="sec"><span class="tag">3.3</span> Cam kết lợi nhuận</h2>
+  <div class="kpis" id="khKpis"></div>
+  <div class="note" id="commitNote" style="margin-top:12px"></div>
 
   <footer>
     Nguồn dữ liệu: Google Sheet "ĐƠN HÀNG_LỊCH XE_2026" và "NHẬP CHI PHÍ 2026" · Số liệu tính trực tiếp từ dữ liệu sống tại thời điểm tải trang · Báo cáo phục vụ mục đích nội bộ.
@@ -154,9 +233,19 @@ function vnum(s){s=(s||'').trim().replace(/\./g,'').replace(/ /g,'').replace(/,/
 function vdate(s){const m=/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/.exec((s||'').trim());if(!m)return null;let d=+m[1],mo=+m[2],y=+m[3];if(y<100)y+=2000;const dt=new Date(Date.UTC(y,mo-1,d));if(dt.getUTCMonth()!==mo-1)return null;return dt.toISOString().slice(0,10);}
 function cleanS(s){return (s||'').replace(/\s+/g,' ').trim();}
 function normalize(rows){const O=[];for(let i=4;i<rows.length;i++){let r=rows[i];if(!r)continue;while(r.length<32)r=r.concat('');const maDon=cleanS(r[1]),khach=cleanS(r[2]);if(!maDon&&!khach)continue;const ncc=cleanS(r[23]);O.push({maDon,khach,ngayNhan:vdate(r[4]),ngayVC:vdate(r[6]),ngayGiao:vdate(r[7]),bsx:cleanS(r[9])||'(chưa gán)',tenHang:cleanS(r[15]),kg:vnum(r[16]),cbm:vnum(r[17]),diemNhan:cleanS(r[18]),diemGiao:cleanS(r[19]),nghiepVu:cleanS(r[21])||'(khác)',cuoc:vnum(r[22]),ncc,cuocNCC:vnum(r[24]),ttNCC:cleanS(r[25]),surcharge:vnum(r[26])+vnum(r[27])+vnum(r[28]),trangThai:cleanS(r[29]),ttCongNo:cleanS(r[30]),own:ncc==='TNP LOG'||ncc===''});}return O;}
-async function fetchCost(src,dI,bI,aI,div,catI,catVal){div=div||1;const u='https://docs.google.com/spreadsheets/d/'+COST_ID+'/export?format=csv&gid='+src;const rows=parseCSV(await (await fetch(u,{cache:'no-store'})).text());const out=[];for(const r of rows){if(r.length<=Math.max(dI,bI,aI))continue;if(catVal!==undefined&&(r[catI]||'').trim()!==catVal)continue;const d=vdate(r[dI]),b=vbsx(r[bI]),a=vnum(r[aI])/div;if(d&&d.slice(0,4)==='2026'&&OWN_SET.has(b)&&a)out.push({b,d,a:Math.round(a)});}return out;}
-async function fetchLuong(src){const u='https://docs.google.com/spreadsheets/d/'+COST_ID+'/export?format=csv&gid='+src;const rows=parseCSV(await (await fetch(u,{cache:'no-store'})).text());const out=[];for(const r of rows){if(r.length<5)continue;const y=(r[0]||'').trim(),mo=(r[1]||'').trim(),b=vbsx(r[3]),a=vnum(r[4]);if(/^\d{4}$/.test(y)&&/^\d{1,2}$/.test(mo)&&OWN_SET.has(b)&&a)out.push({b,ym:y+'-'+String(+mo).padStart(2,'0'),a:Math.round(a)});}return out;}
+async function fetchCost(src,dI,bI,aI,div,catI,catVal){div=div||1;const u=/^\d+$/.test(String(src))?'https://docs.google.com/spreadsheets/d/'+COST_ID+'/export?format=csv&gid='+src:'https://docs.google.com/spreadsheets/d/'+COST_ID+'/gviz/tq?tqx=out:csv&sheet='+encodeURIComponent(src)+'&headers=0';const rows=parseCSV(await (await fetch(u,{cache:'no-store'})).text());const out=[];for(const r of rows){if(r.length<=Math.max(dI,bI,aI))continue;if(catVal!==undefined&&(r[catI]||'').trim()!==catVal)continue;const d=vdate(r[dI]),b=vbsx(r[bI]),a=vnum(r[aI])/div;if(d&&d.slice(0,4)==='2026'&&OWN_SET.has(b)&&a)out.push({b,d,a:Math.round(a)});}return out;}
+async function fetchLuong(src){const u=/^\d+$/.test(String(src))?'https://docs.google.com/spreadsheets/d/'+COST_ID+'/export?format=csv&gid='+src:'https://docs.google.com/spreadsheets/d/'+COST_ID+'/gviz/tq?tqx=out:csv&sheet='+encodeURIComponent(src)+'&headers=0';const rows=parseCSV(await (await fetch(u,{cache:'no-store'})).text());const out=[];for(const r of rows){if(r.length<5)continue;const y=(r[0]||'').trim(),mo=(r[1]||'').trim(),b=vbsx(r[3]),a=vnum(r[4]);if(/^\d{4}$/.test(y)&&/^\d{1,2}$/.test(mo)&&OWN_SET.has(b)&&a)out.push({b,ym:y+'-'+String(+mo).padStart(2,'0'),a:Math.round(a)});}return out;}
 
+const KHUYEN_NGHI=[
+  'Bổ sung đầy đủ dữ liệu chi phí (đặc biệt VETC) cho giai đoạn tháng 1-3 để có bức tranh lợi nhuận chính xác, làm cơ sở so sánh công bằng giữa các tháng.',
+  'Gắn nhãn tuyến (Bắc-Nam / nội miền / cận miền) cho từng chuyến trong dữ liệu lương lái xe, để đối chiếu chính xác với hai định mức khoán 20% và ≤35%.',
+  'Đẩy mạnh khai thác hàng ghép để đưa cơ cấu nghiệp vụ về sát tỷ trọng mục tiêu đã đăng ký (55% nguyên chuyến trục / 35% hàng ghép), qua đó tối ưu chi phí/km.',
+  'Tận dụng giai đoạn giá dầu hạ nhiệt (từ tháng 6) để cải thiện biên lợi nhuận, đồng thời theo dõi sát các đợt điều chỉnh giá xăng dầu để chủ động kế hoạch chi phí quý tới.',
+  'Tăng tỷ trọng vận chuyển bằng xe nhà ở các tuyến có biên lợi nhuận thương mại thấp.',
+  'Xây dựng thêm 2-3 khách hàng lớn mới trong 6 tháng cuối năm để giảm mức độ tập trung vào nhóm khách hiện tại, đồng thời bù phần doanh thu còn thiếu so với kế hoạch.',
+  'Thiết lập lịch nhắc thu hồi công nợ định kỳ hàng tuần đối với các khách có nợ lũy tiến lớn.',
+  'Làm việc với ban lãnh đạo để xác định nguồn số "lỗ" 6 tháng đầu năm nếu không đến từ vận hành xe (chi phí quản lý, lãi vay, khấu hao, hoặc công nợ khó đòi) — xem ghi chú ở đầu mục ①.'
+];
 let ORDERS=[],FUEL=[],URE=[],BDDATA=[],CKDATA=[],VETCDATA=[],LUONGDATA=[];
 const F_FROM='2026-01-01', F_TO='2026-06-30';
 let chMonth=null,chOwn=null,chCust=null,chPlan=null,chFuel=null;
@@ -200,7 +289,7 @@ function statsFor(f,t){
   const totCP=ownCP+commCP;
   const lai=rev-totCP;
   const ar=rows.filter(o=>!paid(o.ttCongNo)).reduce((s,o)=>s+o.cuoc,0);
-  return{rows,n:rows.length,rev,totCP,lai,ar,own,comm,ownDT,ownCP,commDT,commCP};
+  return{rows,n:rows.length,rev,totCP,lai,ar,own,comm,ownDT,ownCP,commDT,commCP,fuel,ure,bd,ck,vetc,luong,bx,cpComm};
 }
 
 function render(){
@@ -211,6 +300,27 @@ function render(){
     ['','Lãi gộp',F(S.lai)+' đ','Biên '+F1(pct(S.lai,S.rev))+'%'],
     ['','Công nợ phải thu',F(S.ar)+' đ',S.rows.filter(o=>!paid(o.ttCongNo)).length+' đơn chưa thu'],
   ].map(x=>'<div class="kpi '+x[0]+'"><div class="lab">'+x[1]+'</div><div class="val">'+x[2]+'</div><div class="x">'+x[3]+'</div></div>').join('');
+
+  // Mục ①: phân tích chi phí Vận hành / Kinh doanh / Nhân sự tuyển dụng + ghi chú lỗ/lãi
+  const laiLa = S.lai>=0;
+  document.getElementById('lossNote').innerHTML =
+    '<b>'+(laiLa?'Không phát hiện số lỗ':'Có số lỗ')+' trong dữ liệu vận hành xe:</b> theo 2 sheet nguồn, 6 tháng đầu năm 2026 đang <b>'+(laiLa?'lãi gộp':'lỗ')+' '+F(Math.abs(S.lai))+' đ</b> (biên '+F1(pct(S.lai,S.rev))+'%). '+
+    'Hai sheet nguồn KHÔNG có dữ liệu chi phí kinh doanh/quản lý (văn phòng, lương quản lý, khấu hao, lãi vay) hay chi phí tuyển dụng nhân sự — nếu số "lỗ" nêu trong cuộc họp đến từ các khoản này hoặc từ công nợ khó đòi ('+F(S.ar)+' đ chưa thu), cần bổ sung số liệu riêng để có bức tranh lỗ/lãi đầy đủ toàn công ty.';
+  document.getElementById('tCpBreakdown').innerHTML =
+    '<thead><tr><th class="l">Phân tích chi phí</th><th>Số tiền</th><th>% Doanh thu</th><th class="l">Nguồn</th></tr></thead><tbody>'+
+    '<tr><td class="l"><b>Vận hành</b> — Dầu</td><td>'+F(S.fuel)+'</td><td>'+F1(pct(S.fuel,S.rev))+'%</td><td class="l">NHAP_DAU (xe nhà)</td></tr>'+
+    '<tr><td class="l">Vận hành — Ure/AdBlue</td><td>'+F(S.ure)+'</td><td>'+F1(pct(S.ure,S.rev))+'%</td><td class="l">NHAP_URE</td></tr>'+
+    '<tr><td class="l">Vận hành — VETC</td><td>'+F(S.vetc)+'</td><td>'+F1(pct(S.vetc,S.rev))+'%</td><td class="l">NHAP_VETC</td></tr>'+
+    '<tr><td class="l">Vận hành — Bảo dưỡng/sửa chữa</td><td>'+F(S.bd)+'</td><td>'+F1(pct(S.bd,S.rev))+'%</td><td class="l">NHAP_BAO DUONG_SUA CHUA</td></tr>'+
+    '<tr><td class="l">Vận hành — Lương lái xe</td><td>'+F(S.luong)+'</td><td>'+F1(pct(S.luong,S.rev))+'%</td><td class="l">NHAP_LUONG TX</td></tr>'+
+    '<tr><td class="l">Vận hành — Chi phí khác (cân xe, bãi xe...)</td><td>'+F(S.ck)+'</td><td>'+F1(pct(S.ck,S.rev))+'%</td><td class="l">CP khác</td></tr>'+
+    '<tr><td class="l">Vận hành — Phụ phí xe nhà</td><td>'+F(S.bx)+'</td><td>'+F1(pct(S.bx,S.rev))+'%</td><td class="l">NHAP DON HANG (surcharge)</td></tr>'+
+    '<tr><td class="l">Vận hành — Cước trả NCC (xe thuê ngoài)</td><td>'+F(S.cpComm)+'</td><td>'+F1(pct(S.cpComm,S.rev))+'%</td><td class="l">NHAP DON HANG (NCC)</td></tr>'+
+    '<tr class="fix"><td class="l fix"><b>Tổng chi phí vận hành xác định được</b></td><td class="fix">'+F(S.totCP)+'</td><td class="fix">'+F1(pct(S.totCP,S.rev))+'%</td><td class="l fix">Tổng các dòng trên</td></tr>'+
+    '<tr><td class="l"><b>Kinh doanh</b> (quản lý, văn phòng, lãi vay, khấu hao...)</td><td colspan="3" class="l"><span class="pill p-warn">Chưa có dữ liệu — cần bổ sung</span></td></tr>'+
+    '<tr><td class="l"><b>Nhân sự tuyển dụng</b> (cho đầu tư / vay bên ngoài)</td><td colspan="3" class="l"><span class="pill p-warn">Chưa có dữ liệu — cần bổ sung</span></td></tr>'+
+    '<tr class="fix"><td class="l fix"><b>LỢI NHUẬN / (LỖ) GỘP VẬN HÀNH</b></td><td class="fix"><b>'+F(S.lai)+'</b></td><td class="fix">'+F1(pct(S.lai,S.rev))+'%</td><td class="l fix">Doanh thu − Tổng chi phí vận hành</td></tr>'+
+    '</tbody>';
 
   // Section 1: monthly
   const months=['2026-01','2026-02','2026-03','2026-04','2026-05','2026-06'];
@@ -329,15 +439,12 @@ function render(){
     '<h3>Cơ cấu xe nhà và thương mại</h3><p>Biên lợi nhuận xe nhà đạt '+F1(ownMargin)+'%, cao hơn đáng kể so với biên thương mại '+F1(commMargin)+'%. Nên ưu tiên tăng tỷ trọng đơn hàng chạy bằng xe nhà thay vì thuê ngoài khi có thể, để cải thiện biên lợi nhuận chung.</p>'+
     '<h3>Mức độ tập trung khách hàng</h3><p>Top 3 khách hàng lớn nhất chiếm khoảng '+F1(top3Share)+'% tổng doanh thu 6 tháng. Mức độ phụ thuộc vào một nhóm nhỏ khách hàng khá cao — cần có kế hoạch mở rộng thêm khách hàng mới để giảm rủi ro khi một khách lớn giảm sản lượng hoặc rời đi.</p>'+
     '<h3>Công nợ phải thu</h3><p>Công nợ phải thu cuối kỳ khoảng '+F(S.ar)+' đ. Nên rà soát danh sách khách còn nợ lũy tiến (xem Bảng công nợ khách hàng ở báo cáo vận hành) để lên kế hoạch thu hồi, ưu tiên các khách có số dư nợ lớn và thời gian nợ kéo dài.</p>'+
-    '<h3>Khuyến nghị</h3><ul>'+
-    '<li>Bổ sung đầy đủ dữ liệu chi phí (đặc biệt VETC) cho giai đoạn tháng 1-3 để có bức tranh lợi nhuận chính xác, làm cơ sở so sánh công bằng giữa các tháng.</li>'+
-    '<li>Gắn nhãn tuyến (Bắc-Nam / nội miền / cận miền) cho từng chuyến trong dữ liệu lương lái xe, để đối chiếu chính xác với hai định mức khoán 20% và ≤35%.</li>'+
-    '<li>Đẩy mạnh khai thác hàng ghép để đưa cơ cấu nghiệp vụ về sát tỷ trọng mục tiêu đã đăng ký (55% nguyên chuyến trục / 35% hàng ghép), qua đó tối ưu chi phí/km.</li>'+
-    '<li>Tận dụng giai đoạn giá dầu hạ nhiệt (từ tháng 6) để cải thiện biên lợi nhuận, đồng thời theo dõi sát các đợt điều chỉnh giá xăng dầu để chủ động kế hoạch chi phí quý tới.</li>'+
-    '<li>Tăng tỷ trọng vận chuyển bằng xe nhà ở các tuyến có biên lợi nhuận thương mại thấp.</li>'+
-    '<li>Xây dựng thêm 2-3 khách hàng lớn mới trong 6 tháng cuối năm để giảm mức độ tập trung vào nhóm khách hiện tại, đồng thời bù phần doanh thu còn thiếu so với kế hoạch.</li>'+
-    '<li>Thiết lập lịch nhắc thu hồi công nợ định kỳ hàng tuần đối với các khách có nợ lũy tiến lớn.</li>'+
-    '</ul>';
+    '<h3>Khuyến nghị</h3><ul>'+KHUYEN_NGHI.map(x=>'<li>'+x+'</li>').join('')+'</ul>';
+
+  document.getElementById('tKhacPhuc').innerHTML =
+    '<thead><tr><th class="l">#</th><th class="l">Hạng mục khắc phục</th><th class="l">Người phụ trách</th><th class="l">Deadline</th></tr></thead><tbody>'+
+    KHUYEN_NGHI.map((x,i)=>'<tr><td class="l">'+(i+1)+'</td><td class="l">'+x+'</td><td class="l"><span class="fillnote">[ điền tại họp ]</span></td><td class="l"><span class="fillnote">[ điền tại họp ]</span></td></tr>').join('')+
+    '</tbody>';
 }
 
 async function loadLive(){
@@ -356,13 +463,86 @@ async function loadLive(){
   try{CKDATA=await fetchCost('1598506940',0,2,4);render();}catch(e){}
   try{VETCDATA=await fetchCost('736934312',23,21,24,1.08);render();}catch(e){}
   try{FUEL=await fetchCost('0',1,2,9);render();}catch(e){}
-  try{URE=await fetchCost('695565677',1,2,9);render();}catch(e){}
-  try{LUONGDATA=await fetchLuong('456666513');render();}catch(e){}
+  try{URE=await fetchCost('NHAP_URE',1,2,9);render();}catch(e){}
+  try{LUONGDATA=await fetchLuong('NHAP_LUONG TX');render();}catch(e){}
 }
 
 document.getElementById('genDate').textContent=new Date().toLocaleDateString('vi-VN');
 document.getElementById('reload').addEventListener('click',loadLive);
 loadLive();
+</script>
+
+<script>
+// ===== Mục 10: Kế hoạch 6 tháng cuối năm 2026 (T7-T12) — cùng công thức với kh-cp-dt.js =====
+(function(){
+  const KH_MONTHS=['T7/26','T8/26','T9/26','T10/26','T11/26','T12/26'];
+  const KH_COST=[
+    {k:'8T-HN', km:1710, dn:20, un:0.9, luong:4000000, bdkm:300, vetcVAT:2605967},
+    {k:'15T-HN', km:1710, dn:23, un:1.2, luong:4250000, bdkm:350, vetcVAT:3790356}
+  ];
+  const KH_URE=13200;
+  let khTuaxe=[4,4.5,5,5.5,5.5,5.5];
+  let chKhPlan=null;
+  function khRound(v,m){return Math.round(v/m)*m;}
+  function calcLane(L,d,r){
+    const dau=L.km*L.dn/100*d;
+    const ure=L.km*L.un/100*KH_URE;
+    const bd=L.km*L.bdkm;
+    const tttx=dau+ure+L.luong+bd;
+    const vetc=L.vetcVAT/1.08;
+    const tong=tttx+vetc;
+    const gia=khRound(tong/r,100000);
+    return {dau,ure,bd,luong:L.luong,vetc,tong,gia};
+  }
+  function buildTuaxeRow(){
+    const h='<thead><tr><th class="l">Tua/xe mục tiêu</th>'+KH_MONTHS.map(m=>'<th>'+m+'</th>').join('')+'</tr></thead><tbody><tr><td class="l">Nhập tua/xe</td>'+
+      khTuaxe.map((v,i)=>'<td><input data-i="'+i+'" type="number" step="0.5" min="0" value="'+v+'" style="width:56px;text-align:right;border:1.5px solid var(--line);border-radius:6px;padding:4px;font-weight:700;color:var(--brand)"></td>').join('')+
+      '</tr></tbody>';
+    const t=document.getElementById('tTuaxe');
+    t.innerHTML=h;
+    t.querySelectorAll('input').forEach(inp=>{
+      inp.addEventListener('input',e=>{khTuaxe[+e.target.dataset.i]=parseFloat(e.target.value)||0;renderKhPlan();});
+    });
+  }
+  function renderKhPlan(){
+    const d=parseFloat(document.getElementById('kh_gia_dau').value)||26270;
+    const r=parseFloat(document.getElementById('kh_rt').value)||0.8;
+    const xe8=parseFloat(document.getElementById('kh_xe8').value)||0;
+    const xe15=parseFloat(document.getElementById('kh_xe15').value)||0;
+    const c8=calcLane(KH_COST[0],d,r), c15=calcLane(KH_COST[1],d,r);
+    const rev8=c8.gia*2, rev15=c15.gia*2;
+    const d8=c8.dau*2,d15=c15.dau*2,u8=c8.ure*2,u15=c15.ure*2,v8=c8.vetc*2,v15=c15.vetc*2,b8=c8.bd*2,b15=c15.bd*2,l8=c8.luong*2,l15=c15.luong*2;
+    const M=KH_MONTHS.map((m,i)=>{
+      const tx=khTuaxe[i], t8=xe8*tx, t15=xe15*tx;
+      const dt=t8*rev8+t15*rev15;
+      const dau=t8*d8+t15*d15, ure=t8*u8+t15*u15, vetc=t8*v8+t15*v15, bd=t8*b8+t15*b15, luong=t8*l8+t15*l15;
+      const cp=dau+ure+vetc+bd+luong;
+      return {m,tua:t8+t15,dt,dau,ure,vetc,bd,luong,cp,ln:dt-cp};
+    });
+    const S=k=>M.reduce((s,x)=>s+x[k],0);
+    const T={dt:S('dt'),cp:S('cp'),ln:S('ln')};
+    document.getElementById('khKpis').innerHTML=[
+      ['brand','Doanh thu cả kỳ',F(T.dt)+' đ','T7/26 – T12/26'],
+      ['','Chi phí cả kỳ',F(T.cp)+' đ',F1(pct(T.cp,T.dt))+'% doanh thu'],
+      ['','Lợi nhuận cả kỳ',F(T.ln)+' đ','Biên '+F1(pct(T.ln,T.dt))+'%'],
+    ].map(x=>'<div class="kpi '+x[0]+'"><div class="lab">'+x[1]+'</div><div class="val">'+x[2]+'</div><div class="x">'+x[3]+'</div></div>').join('');
+    const cnEl=document.getElementById('commitNote');
+    if(cnEl)cnEl.innerHTML='<b>Cam kết lợi nhuận 6 tháng cuối năm (đội xe nhà TNP, theo kịch bản hiện tại):</b> lợi nhuận cả kỳ ước đạt <b>'+F(T.ln)+' đ</b>, biên lợi nhuận ổn định quanh <b>'+F1(pct(T.ln,T.dt))+'%</b> mỗi tháng. Đây là phần lợi nhuận có thể cam kết chắc chắn vì có đầy đủ mô hình chi phí xe nhà. Phần doanh thu thương mại (NCC ngoài, khoảng 4.832.000.000 đ theo kế hoạch mục 3.1) chưa có mô hình chi phí/biên lợi nhuận riêng — biên thương mại 6 tháng đầu năm thấp hơn xe nhà đáng kể (xem mục 1.4), nên KHÔNG cộng gộp trực tiếp vào số cam kết lợi nhuận này. <span class="fillnote">[ Xác nhận / điều chỉnh mức cam kết chính thức với ban lãnh đạo tại cuộc họp — có thể đổi số xe, tua/xe, giá dầu ở trên để thử kịch bản khác. ]</span>';
+    document.getElementById('tKhPlan').innerHTML='<thead><tr><th class="l">Tháng</th><th>Tổng tua</th><th>Doanh thu</th><th>Dầu</th><th>Ure/AdBlue</th><th>VETC</th><th>Bảo dưỡng</th><th>Lương lái xe</th><th>Tổng chi phí</th><th>Lợi nhuận</th><th>Biên LN</th></tr></thead><tbody>'+
+      M.map(x=>'<tr><td class="l">'+x.m+'</td><td>'+F1(x.tua)+'</td><td>'+F(x.dt)+'</td><td>'+F(x.dau)+'</td><td>'+F(x.ure)+'</td><td>'+F(x.vetc)+'</td><td>'+F(x.bd)+'</td><td>'+F(x.luong)+'</td><td>'+F(x.cp)+'</td><td>'+F(x.ln)+'</td><td>'+F1(pct(x.ln,x.dt))+'%</td></tr>').join('')+
+      '</tbody><tfoot><tr><td class="l">TỔNG</td><td>'+F1(S('tua'))+'</td><td>'+F(T.dt)+'</td><td>'+F(S('dau'))+'</td><td>'+F(S('ure'))+'</td><td>'+F(S('vetc'))+'</td><td>'+F(S('bd'))+'</td><td>'+F(S('luong'))+'</td><td>'+F(T.cp)+'</td><td>'+F(T.ln)+'</td><td>'+F1(pct(T.ln,T.dt))+'%</td></tr></tfoot>';
+    if(chKhPlan)chKhPlan.destroy();
+    chKhPlan=new Chart(document.getElementById('chKhPlan'),{type:'bar',data:{labels:KH_MONTHS,datasets:[
+      {label:'Doanh thu',data:M.map(x=>x.dt),backgroundColor:'#0f6e8c',borderRadius:3},
+      {label:'Chi phí',data:M.map(x=>x.cp),backgroundColor:'#f59e0b',borderRadius:3}
+    ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11},boxWidth:12}},tooltip:{callbacks:{label:c=>c.dataset.label+': '+F(c.parsed.y)+' đ'}}},scales:{y:{ticks:{callback:v=>F(v/1e6)+'M'}}}}});
+  }
+  ['kh_gia_dau','kh_rt','kh_xe8','kh_xe15'].forEach(id=>{
+    document.getElementById(id).addEventListener('input',renderKhPlan);
+  });
+  buildTuaxeRow();
+  renderKhPlan();
+})();
 </script>
 </body>
 </html>
